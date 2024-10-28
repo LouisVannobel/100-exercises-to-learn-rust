@@ -25,7 +25,7 @@ impl Ticket {
         }
         //assert!(title.len() < 50, "the `title` should be at most 50 bytes long. actuellement il est de {}", title.len());
         if title.len() > 50{
-            panic!("the `title` should be at most 50 bytes long.")
+            panic!("Title cannot be longer than 50 bytes")
         }
         if description.len() > 500{
             panic!("the `description` should be at most 500 bytes long.")
