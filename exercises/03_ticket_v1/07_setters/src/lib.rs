@@ -1,8 +1,3 @@
-// TODO: Add &mut-setters to the `Ticket` struct for each of its fields.
-//   Make sure to enforce the same validation rules you have in `Ticket::new`!
-//   Even better, extract that logic and reuse it in both places. You can use
-//   private functions or private static methods for that.
-
 pub struct Ticket {
     title: String,
     description: String,
@@ -11,27 +6,13 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        if title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if title.len() > 50 {
-            panic!("Title cannot be longer than 50 bytes");
-        }
-        if description.is_empty() {
-            panic!("Description cannot be empty");
-        }
-        if description.len() > 500 {
-            panic!("Description cannot be longer than 500 bytes");
-        }
-        if status != "To-Do" && status != "In Progress" && status != "Done" {
-            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
-        }
-
-        Ticket {
+        let mut ticket = Ticket {
             title,
             description,
             status,
-        }
+        };
+        ticket.validate_fields();
+        ticket
     }
 
     pub fn title(&self) -> &String {
@@ -45,7 +26,57 @@ impl Ticket {
     pub fn status(&self) -> &String {
         &self.status
     }
+
+    pub fn set_title(&mut self, title: String) {
+        self.title = title;
+        self.validate_title();
+    }
+
+    pub fn set_description(&mut self, description: String) {
+        self.description = description;
+        self.validate_description();
+    }
+
+    pub fn set_status(&mut self, status: String) {
+        self.status = status;
+        self.validate_status();
+    }
+
+    // Méthode privée pour valider tous les champs
+    fn validate_fields(&self) {
+        self.validate_title();
+        self.validate_description();
+        self.validate_status();
+    }
+
+    // Validation du champ `title`
+    fn validate_title(&self) {
+        if self.title.is_empty() {
+            panic!("Title cannot be empty");
+        }
+        if self.title.len() > 50 {
+            panic!("Title cannot be longer than 50 bytes");
+        }
+    }
+
+    // Validation du champ `description`
+    fn validate_description(&self) {
+        if self.description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+        if self.description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+    }
+
+    // Validation du champ `status`
+    fn validate_status(&self) {
+        if self.status != "To-Do" && self.status != "In Progress" && self.status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+    }
 }
+
 
 #[cfg(test)]
 mod tests {
