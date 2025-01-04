@@ -2,6 +2,33 @@
 //  unless a certain operation has been performed on it.
 //  You can see the expected API in the tests below.
 
+pub enum BombState {
+    Armed,
+    Defused,
+}
+
+pub struct DropBomb {
+    state: BombState,
+}
+
+impl DropBomb {
+    pub fn new() -> Self {
+        DropBomb { state: BombState::Armed }
+    }
+
+    pub fn defuse(&mut self) {
+        self.state = BombState::Defused;
+    }
+}
+
+impl Drop for DropBomb {
+    fn drop(&mut self) {
+        if let BombState::Armed = self.state {
+            panic!("Boom!");
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
